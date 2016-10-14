@@ -24,10 +24,5 @@ public class BestPlayerMovement : MonoBehaviour {
 			rb.velocity = new Vector3(0.0f,0.0f,0.0f);
 		}
 	}
-	//Stabilization Func!
-	/*public IEnumerator waitTime(float waits){
-		transform.rotation = Quaternion.identity;
-		yield return new WaitForSeconds(waits);
-	}*/
 }
 
