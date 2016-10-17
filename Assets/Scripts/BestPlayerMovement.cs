@@ -15,7 +15,7 @@ public class BestPlayerMovement : MonoBehaviour {
 		
 		//Gets the camera of the player the script is attached to
 		//cam has no use as of yet in the 2D prototype
-		cam = transform.Find("PlayerCamera");
+		cam = (Camera)transform.Find("PlayerCamera");
 	}
 
 	// Use FixedUpdate for physics
