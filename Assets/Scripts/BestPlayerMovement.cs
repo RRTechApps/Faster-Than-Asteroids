@@ -5,7 +5,7 @@ public class BestPlayerMovement : MonoBehaviour {
 
 	// Initialization of variables :)
 	private Rigidbody rb;
-	private Camera cam;
+	private Transform cam;
 	public float speed;
 	public int angSpeed = 40;
 
