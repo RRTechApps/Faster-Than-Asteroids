@@ -5,7 +5,7 @@ public class BestPlayerMovement : MonoBehaviour {
 
 	// Initialization of variables :)
 	private Rigidbody rb;
-	private Camera cam;
+	private Transform cam;
 	public float speed;
 	public int angSpeed = 40;
 
@@ -15,7 +15,7 @@ public class BestPlayerMovement : MonoBehaviour {
 		
 		//Gets the camera of the player the script is attached to
 		//cam has no use as of yet in the 2D prototype
-		cam = (Camera)transform.Find("PlayerCamera");
+		cam = transform.Find("PlayerCamera");
 	}
 
 	// Use FixedUpdate for physics
