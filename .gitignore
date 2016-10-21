@@ -51,4 +51,6 @@ Temporary Items
 *.csproj
 Library/
 ProjectSettings/
-*.meta
+Temp/
+.vs/
+*.userprefs
