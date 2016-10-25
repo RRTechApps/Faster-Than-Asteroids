@@ -20,10 +20,13 @@ public class BestPlayerMovement : MonoBehaviour {
 
 	// Use FixedUpdate for physics
 	void FixedUpdate () {
-		rb.transform.Rotate(0.0f, Input.GetAxis("Horizontal") * Time.deltaTime * angSpeed, 0.0f);
+		rb.AddRelativeTorque(0.0f, Input.GetAxis("Horizontal") * Time.deltaTime * angSpeed, 0.0f);
 		rb.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * speed);
-		if(Input.GetKeyDown(KeyCode.Space))
+		//rb.SetMaxAngularVelocity (angSpeed);
+		if (Input.GetKeyDown (KeyCode.Space)) {
 			rb.velocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+		}
 	}
 	//Stabilization Func! WHY DOES THIS EXIST???
 	/*public IEnumerator waitTime(float waits){
