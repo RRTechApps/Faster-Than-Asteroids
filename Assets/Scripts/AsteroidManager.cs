@@ -6,22 +6,21 @@ public class AsteroidManager : MonoBehaviour {
 	//This script should go on an empty gameObject located at the middle of the game field, and is used to manage asteroids (spawning them)
 	//There should only be one instance of this script per client/server
 
-	public int asteroidsOnField = 20; 			//# of asteroids on the game field at all times
+	public int asteroidsOnField; 			//# of asteroids on the game field at all times
 	public GameObject[] asteroidPrefabs;
 	public Vector3 fieldRadius; 				//Used to define where the asteroids will spawn from
-	public float asteroidLaunchForce = 20; 	//Magnitude of the launch velocity (will be vectorized in code)
+	public float asteroidLaunchForce; 	//Magnitude of the launch velocity (will be vectorized in code)
 
 	private Vector3 fieldOffset;
 	private Vector3 fieldMargins;
 
 	//Initialization
 	void Start () {
+		asteroidsOnField = 20;
+		asteroidLaunchForce = 20;
 		fieldOffset = transform.position;
 		fieldMargins = new Vector3(1.5f, 0.0f, 1.5f);
 		AddAsteroid();
-	}
-
-	void Loop(){
 	}
 
 	//[Command]
