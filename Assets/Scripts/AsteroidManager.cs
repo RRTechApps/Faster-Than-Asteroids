@@ -3,9 +3,8 @@ using System.Collections;
 
 
 public class AsteroidManager : MonoBehaviour {
-	//This script should go on an empty gameObject located at the middle of the game field, and is used to manage asteroids
+	//This script should go on an empty gameObject located at the middle of the game field, and is used to manage asteroids (spawning them)
 	//There should only be one instance of this script per client/server
-	//Each asteroid will have its own collider and destroyer script different to this script
 
 	public int asteroidsOnField = 20; 			//# of asteroids on the game field at all times
 	public GameObject[] asteroidPrefabs;
