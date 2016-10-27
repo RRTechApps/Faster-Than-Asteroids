@@ -5,10 +5,12 @@ public class ObjectManager : MonoBehaviour {
 	
 	private string objectType;
 	private int magnitudeOfAction;
+	private Rigidbody rb;
 
 	//Initialization
 	void Start () {
 		objectType = this.tag;
+		rb = this.GetComponent<Rigidbody>();
 	}
 
 	//Set the magnitude of what the object attached is supposed to do
@@ -17,7 +19,7 @@ public class ObjectManager : MonoBehaviour {
 	}
 
 	//Do what the object attached is supposed to do
-	public void performObjectTask(GameObject target, bool destroy){
+	public void performObjectTask(GameObject target){
 		switch(objectType) {
 			case "HPCol":
 				target.GetComponent<PlayerManager>().updateHealth(magnitudeOfAction);
@@ -31,9 +33,6 @@ public class ObjectManager : MonoBehaviour {
 			case "Bullet":
 				target.GetComponent<PlayerManager>().bulletCollision(magnitudeOfAction);
 				break;
-		}
-		if(destroy) {
-			Destroy(this);
 		}
 	}
 }
