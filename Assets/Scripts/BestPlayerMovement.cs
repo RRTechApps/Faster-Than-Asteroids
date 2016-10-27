@@ -3,9 +3,9 @@ using System.Collections;
 
 public class BestPlayerMovement : MonoBehaviour {
 
-	// Initialization of variables :)
+	// Initialization of variables
 	private Rigidbody rb;
-	private Transform cam;
+	//private Transform cam; We don't need this for 2d
 	public float speed;
 	public int angSpeed = 40;
 
@@ -15,7 +15,7 @@ public class BestPlayerMovement : MonoBehaviour {
 		
 		//Gets the camera of the player the script is attached to
 		//cam has no use as of yet in the 2D prototype
-		cam = transform.Find("PlayerCamera");
+		//cam = transform.Find("PlayerCamera");
 	}
 
 	// Use FixedUpdate for physics
@@ -28,10 +28,5 @@ public class BestPlayerMovement : MonoBehaviour {
 			rb.angularVelocity = Vector3.zero;
 		}
 	}
-	//Stabilization Func! WHY DOES THIS EXIST???
-	/*public IEnumerator waitTime(float waits){
-		transform.rotation = Quaternion.identity;
-		yield return new WaitForSeconds(waits);
-	}*/
 }
 
