@@ -49,7 +49,6 @@ Temporary Items
 #Unity Nonsense
 *.sln
 *.csproj
-Library/
 ProjectSettings/
 Temp/
 .vs/
