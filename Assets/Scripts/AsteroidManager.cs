@@ -44,6 +44,8 @@ public class AsteroidManager : MonoBehaviour {
 		Vector3 direction = pointInField - asteroidPosition;
 		//Create the asteroid gameobject
 		GameObject genAsteroid = (GameObject)Instantiate(asteroidPrefabs[Random.Range(0,3)], asteroidPosition, Quaternion.FromToRotation(Vector3.forward, direction), this.transform);
+		//Set the size of the asteroid
+		genAsteroid.GetComponent<ObjectManager>().setMagnitudeOfActionF(Random.Range(1.0f, 20.0f));
 		//Add a force to the asteroid to make it go through the field
 		genAsteroid.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * asteroidLaunchForce);
 	}
