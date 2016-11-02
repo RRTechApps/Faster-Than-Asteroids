@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour {
 	//[SyncVar(hook=onEnergyChange)]
 	private int energy;
 	private Rigidbody rb;
-	//private Transform cam; We don't need this for 2d
+	public Camera cam;
 	public float speed;
 	public int angSpeed;
 
@@ -20,12 +20,12 @@ public class PlayerManager : MonoBehaviour {
 
 		//Gets the camera of the player the script is attached to
 		//cam has no use as of yet in the 2D prototype
-		//cam = transform.Find("PlayerCamera");
+
 	}
-		
+
 	//Movement is done here
 	void FixedUpdate () {
-		
+
 		transform.Rotate(0.0f, Input.GetAxis("Horizontal") * Time.deltaTime * angSpeed, 0.0f);
 		rb.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * speed);
 		if (Input.GetKeyDown (KeyCode.Space)) {

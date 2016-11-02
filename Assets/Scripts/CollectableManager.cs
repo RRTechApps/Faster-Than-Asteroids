@@ -16,7 +16,7 @@ public class CollectableManager : MonoBehaviour {
 	//Chance per each box amount to be spawned
 	private int[] boxAmountsChance;
 	//# boxes per each type to be on field		Don't think we will use this anymore :(
-	//private int[] boxesOnField; 
+	//private int[] boxesOnField;
 	//Radius for boxes to spawn around
 	private float boxSpawnRadius;
 	private float respawnTime;
@@ -46,7 +46,7 @@ public class CollectableManager : MonoBehaviour {
 			//Where the box will be located
 			Vector3 boxPos = new Vector3(around.x + Random.Range(-boxSpawnRadius, boxSpawnRadius), 0, around.z + Random.Range(-boxSpawnRadius, boxSpawnRadius)); //around.y + Random.Range(-boxSpawnRadius, boxSpawnRadius)
 			//Spawns either a random hp or energy box with a random amount using the chance
-			GameObject boxGen = (GameObject)Instantiate(Random.Range(0, 2) == 0 ? hpBoxPrefab : energyBoxPrefab, boxPos, Quaternion.Euler(0.0f, Random.Range(-180.0f, 180.0f), 0.0f), this.transform);
+			GameObject boxGen = (GameObject)Instantiate(Random.Range(0, 2) == 0 ? hpBoxPrefab : energyBoxPrefab, boxPos, Quaternion.Euler(0.0f, Random.Range(-180.0f, 180.0f), 0.0f)/*, this.transform*/);
 			//Set the amount of the generated box
 			boxGen.GetComponent<ObjectManager>().setMagnitudeOfAction(boxAmount);
 		}

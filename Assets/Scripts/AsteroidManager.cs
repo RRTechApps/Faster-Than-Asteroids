@@ -28,7 +28,7 @@ public class AsteroidManager : MonoBehaviour {
 	//Once we need to add MP ^^
 	void AddAsteroid(){
 		float x, z; 			//x and/or z will be set to a edge coordinate, the one not set to the edge coordinate will have any coordinate along the edge
-		if(RandBool()) {		//Used to assign x and z to noted constraints 
+		if(RandBool()) {		//Used to assign x and z to noted constraints
 			x = Random.Range(-fieldRadius.x, fieldRadius.x);
 			z = RandBool() ? fieldRadius.z : -fieldRadius.z;
 		} else {
@@ -43,7 +43,7 @@ public class AsteroidManager : MonoBehaviour {
 		//Direction to point the asteroid
 		Vector3 direction = pointInField - asteroidPosition;
 		//Create the asteroid gameobject
-		GameObject genAsteroid = (GameObject)Instantiate(asteroidPrefabs[Random.Range(0,3)], asteroidPosition, Quaternion.FromToRotation(Vector3.forward, direction), this.transform);
+		GameObject genAsteroid = (GameObject)Instantiate(asteroidPrefabs[Random.Range(0,3)], asteroidPosition, Quaternion.FromToRotation(Vector3.forward, direction)/*, this.transform*/);
 		//Set the size of the asteroid
 		genAsteroid.GetComponent<ObjectManager>().setMagnitudeOfActionF(Random.Range(1.0f, 20.0f));
 		//Add a force to the asteroid to make it go through the field
