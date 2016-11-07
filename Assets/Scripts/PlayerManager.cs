@@ -7,31 +7,61 @@ public class PlayerManager : MonoBehaviour {
 	//[SyncVar(hook=onEnergyChange)]
 	private int energy;
 	private Rigidbody rb;
-	public Camera cam;
+	private Transform hostTransform;
+	private Vector3 camOffset;
+	private Vector3 lightOffset;
+	private float lastVelocitySign;
+
+	public float rotation;
+	public Camera playerCamera;
+	public GameObject playerLight;
 	public float speed;
-	public int angSpeed;
+	public float angSpeed;
+	public float maxSpeed;
+	public float turningSpringRate;
+
 
 	//Initialization
 	void Start () {
 		health = 100;
 		energy = 100;
 		angSpeed = 40;
+		//Player's rigidbody
 		rb = GetComponent<Rigidbody>();
-
-		//Gets the camera of the player the script is attached to
-		//cam has no use as of yet in the 2D prototype
-
+		//Original offset of the camera
+		camOffset = playerCamera.transform.position;
+		//Original offset of the light
+		lightOffset = playerLight.transform.position;
+		//Front of the player model
+		rotation = 0.0f;
+		hostTransform = this.transform.parent;
+		lastVelocitySign = 1.0f;
 	}
 
 	//Movement is done here
 	void FixedUpdate () {
+		rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
+		Vector3 prevVelocity = rb.velocity;
+		float horizontalControl = Input.GetAxis("Horizontal");
+		float verticalControl = Input.GetAxis("Vertical");
 
-		transform.Rotate(0.0f, Input.GetAxis("Horizontal") * Time.deltaTime * angSpeed, 0.0f);
-		rb.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * speed);
+		if(horizontalControl != 0.0f) {
+			transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
+			if(verticalControl == lastVelocitySign && verticalControl == 0.0f)
+				rb.velocity = new Vector3(prevVelocity.magnitude * lastVelocitySign * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * lastVelocitySign * Mathf.Cos(rotation));
+			else
+				rb.velocity = new Vector3(prevVelocity.magnitude * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * Mathf.Cos(rotation));
+		}
+		if(verticalControl != 0.0f) {
+			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)));
+			lastVelocitySign = Mathf.Sign(verticalControl);
+		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			rb.velocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;
 		}
+		playerCamera.transform.position = this.transform.position + camOffset;
+		playerLight.transform.position = this.transform.position + lightOffset;
 	}
 
 	void onTriggerEnter(Collider target){
