@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour {
 	private Transform hostTransform;
 	private Vector3 camOffset;
 	private Vector3 lightOffset;
-	private float lastVelocitySign;
+	private Vector3 lastVelocitySign;
 
 	public float rotation;
 	public Camera playerCamera;
@@ -35,7 +35,6 @@ public class PlayerManager : MonoBehaviour {
 		//Front of the player model
 		rotation = 0.0f;
 		hostTransform = this.transform.parent;
-		lastVelocitySign = 1.0f;
 	}
 
 	//Movement is done here
@@ -44,17 +43,17 @@ public class PlayerManager : MonoBehaviour {
 		Vector3 prevVelocity = rb.velocity;
 		float horizontalControl = Input.GetAxis("Horizontal");
 		float verticalControl = Input.GetAxis("Vertical");
+		lastVelocitySign = new Vector3(Mathf.Sign(rb.velocity.x), 0.0f, Mathf.Sign(rb.velocity.z));
 
 		if(horizontalControl != 0.0f) {
 			transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
-			if(verticalControl == lastVelocitySign && verticalControl == 0.0f)
-				rb.velocity = new Vector3(prevVelocity.magnitude * lastVelocitySign * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * lastVelocitySign * Mathf.Cos(rotation));
-			else
-				rb.velocity = new Vector3(prevVelocity.magnitude * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * Mathf.Cos(rotation));
+			//if(verticalControl == lastVelocitySign)
+				rb.velocity = new Vector3(prevVelocity.magnitude * lastVelocitySign.x * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * lastVelocitySign.z * Mathf.Cos(rotation));
+			//else
+				//rb.velocity = new Vector3(prevVelocity.magnitude * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * Mathf.Cos(rotation));
 		}
 		if(verticalControl != 0.0f) {
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)));
-			lastVelocitySign = Mathf.Sign(verticalControl);
 		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			rb.velocity = Vector3.zero;

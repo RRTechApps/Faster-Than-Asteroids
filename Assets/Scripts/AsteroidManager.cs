@@ -17,10 +17,10 @@ public class AsteroidManager : MonoBehaviour {
 	//Initialization
 	void Start () {
 		asteroidsOnField = 20;
-		asteroidLaunchForce = 20;
 		fieldOffset = transform.position;
 		fieldMargins = new Vector3(1.5f, 0.0f, 1.5f);
-		AddAsteroid();
+		//for(int i = 0; i < 50; i++)
+			//AddAsteroid();
 	}
 
 	//[Command]
