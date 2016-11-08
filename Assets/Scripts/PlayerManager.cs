@@ -10,7 +10,6 @@ public class PlayerManager : MonoBehaviour {
 	private Transform hostTransform;
 	private Vector3 camOffset;
 	private Vector3 lightOffset;
-	private Vector3 lastVelocitySign;
 
 	public float rotation;
 	public Camera playerCamera;
@@ -40,20 +39,20 @@ public class PlayerManager : MonoBehaviour {
 	//Movement is done here
 	void FixedUpdate () {
 		rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
-		Vector3 prevVelocity = rb.velocity;
-		float horizontalControl = Input.GetAxis("Horizontal");
 		float verticalControl = Input.GetAxis("Vertical");
-		lastVelocitySign = new Vector3(Mathf.Sign(rb.velocity.x), 0.0f, Mathf.Sign(rb.velocity.z));
+		float horizontalControl = Input.GetAxis("Horizontal");
 
-		if(horizontalControl != 0.0f) {
-			transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
-			//if(verticalControl == lastVelocitySign)
-				rb.velocity = new Vector3(prevVelocity.magnitude * lastVelocitySign.x * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * lastVelocitySign.z * Mathf.Cos(rotation));
-			//else
-				//rb.velocity = new Vector3(prevVelocity.magnitude * Mathf.Sin(rotation), 0.0f, prevVelocity.magnitude * Mathf.Cos(rotation));
-		}
 		if(verticalControl != 0.0f) {
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)));
+			if(Mathf.Sign(verticalControl) == -1.0f) {
+				horizontalControl *= -1;
+			}
+		}
+		if(horizontalControl != 0.0f) {
+			transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
+			rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
+			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
+			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
 		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			rb.velocity = Vector3.zero;
