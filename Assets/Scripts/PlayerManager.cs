@@ -24,7 +24,6 @@ public class PlayerManager : MonoBehaviour {
 	void Start () {
 		health = 100;
 		energy = 100;
-		angSpeed = 40;
 		//Player's rigidbody
 		rb = GetComponent<Rigidbody>();
 		//Original offset of the camera
@@ -49,7 +48,8 @@ public class PlayerManager : MonoBehaviour {
 			}
 		}
 		if(horizontalControl != 0.0f) {
-			transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
+			this.transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
+			rb.maxAngularVelocity = angSpeed / 20.0f;
 			rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
 			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
 			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);

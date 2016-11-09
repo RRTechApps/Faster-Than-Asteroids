@@ -20,8 +20,6 @@ public class CollectableManager : MonoBehaviour {
 	//Radius for boxes to spawn around
 	private float boxSpawnRadius;
 	private float respawnTime;
-	private Vector3 fieldOffset;
-	private Vector3 fieldMargins;
 
 	// Use this for initialization
 	void Start () {

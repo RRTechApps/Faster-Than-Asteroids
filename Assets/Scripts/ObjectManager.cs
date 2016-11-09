@@ -7,14 +7,34 @@ public class ObjectManager : MonoBehaviour {
 	private int magnitudeOfAction;
 	private float magnitudeOfActionF;
 	private Rigidbody rb;
+	private bool destroyOnExit;
+	private Vector3 gameFieldRadius;
 
 	//Initialization
-	void Start () {
+	void Start(){
 		objectType = this.tag;
 		rb = this.GetComponent<Rigidbody>();
+		destroyOnExit = true;
 		if(objectType == "Asteroid") {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
 			this.transform.localScale.Scale(scaleBy);
+		}
+		gameFieldRadius = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldRadius();
+	}
+
+	//For the destroyOnExit flag
+	void Update(){
+		if(destroyOnExit) {
+			float x, z;
+			x = this.transform.position.x;
+			z = this.transform.position.z;
+			//If the position of this object is outside the radius of the game field
+			if(gameFieldRadius.x - Mathf.Abs(x) < 0 || gameFieldRadius.z - Mathf.Abs(z) < 0) {
+				Destroy(this.gameObject);
+				if(this.objectType.Equals("Asteroid")) {
+					GameObject.Find("Asteroids").GetComponent<AsteroidManager>().AddAsteroid();
+				}
+			}
 		}
 	}
 
@@ -30,6 +50,10 @@ public class ObjectManager : MonoBehaviour {
 	//Set the magnitude of what the object attached is supposed to do
 	public void setMagnitudeOfActionF(float magnitude){
 		magnitudeOfActionF = magnitude;
+	}
+
+	public void setDestroyOnExit(bool destroy){
+		destroyOnExit = destroy;
 	}
 
 	//Do what the object attached is supposed to do
@@ -61,7 +85,8 @@ public class ObjectManager : MonoBehaviour {
 					break;
 				case "Asteroid":
 					//Make an explosion and spawn a few boxes depending on size of asteroid
-					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 3, transform.position);
+					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
+					Destroy(this.gameObject);
 					break;
 				case "Bullet":
 					//Make an explosion and destroy target and self
