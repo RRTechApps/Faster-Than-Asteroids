@@ -17,6 +17,7 @@ public class AsteroidManager : MonoBehaviour {
 	//Initialization
 	void Start () {
 		fieldRadius = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldRadius();
+		Debug.Log(fieldRadius);
 		fieldOffset = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldOffset();
 		fieldMargins = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldMargins();
 		for(int i = 0; i < asteroidsOnField; i++) {
@@ -36,10 +37,11 @@ public class AsteroidManager : MonoBehaviour {
 		// Random point in the gamefield that we will point the asteroid at
 		Vector3 pointInField = new Vector3(Random.Range(-fieldRadius.x, fieldRadius.x), 0.0f, Random.Range(-fieldRadius.z, fieldRadius.z));
 		Vector3 asteroidPosition = new Vector3(Random.Range(-fieldRadius.x - fieldMargins.x, fieldRadius.x + fieldMargins.x), 0.0f, Random.Range(-fieldRadius.z - fieldMargins.z, fieldRadius.z + fieldMargins.z));
+		//Debug.Log("AP : " + asteroidPosition + " " + (-fieldRadius.x - fieldMargins.x) + " " + (fieldRadius.x + fieldMargins.x));
 		asteroidPosition += fieldOffset;
 		//Direction to point the asteroid
 		Vector3 direction = pointInField - asteroidPosition;
-		Debug.Log("Dir: " + direction + " PIF: " + pointInField + " AP: " + asteroidPosition);
+		//Debug.Log("Dir: " + direction + " PIF: " + pointInField + " AP: " + asteroidPosition);
 		//Create the asteroid gameobject
 		GameObject genAsteroid = (GameObject)Instantiate(asteroidPrefabs[Random.Range(0,3)], asteroidPosition, Quaternion.FromToRotation(Vector3.forward, direction), this.transform);
 		//Set the size of the asteroid
