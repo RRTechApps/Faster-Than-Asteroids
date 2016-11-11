@@ -86,6 +86,7 @@ public class ObjectManager : MonoBehaviour {
 				case "Asteroid":
 					//Make an explosion and spawn a few boxes depending on size of asteroid
 					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
+					GameObject.Find("Asteroids").GetComponent<AsteroidManager>().AddAsteroid();
 					Destroy(this.gameObject);
 					break;
 				case "Bullet":

@@ -16,8 +16,6 @@ public class PlayerManager : MonoBehaviour {
 	public GameObject playerLight;
 	public float speed;
 	public float angSpeed;
-	public float maxSpeed;
-	public float turningSpringRate;
 
 
 	//Initialization
