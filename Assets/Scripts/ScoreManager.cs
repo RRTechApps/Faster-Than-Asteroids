@@ -10,12 +10,16 @@ public class ScoreManager : MonoBehaviour {
 	int score;
 	//what will be placed inside of scoreTextBox
 	string text;
+	//game over screen (for enabling/disabling)
+	Canvas gameOverCanvas;
 
 	// Use this for initialization
 	void Start () {
 		score = 0;
 		text = "Score: " + score;
 		scoreTextBox = this.GetComponent<Text> ();
+		gameOverCanvas = GameObject.Find("GameOverCanvas").GetComponent<Canvas>();
+		gameOverCanvas.enabled = false;
 	}
 
 	//call whenever an asteroid is destroyed (from object manager)
@@ -24,5 +28,12 @@ public class ScoreManager : MonoBehaviour {
 		score++;
 		text = "Score: " + score;
 		scoreTextBox.text = text;
+
+		//if score is >= 42, then enable the game over screen
+		if (score >= 42) {
+			gameOverCanvas.enabled = true;
+		} else {
+			gameOverCanvas.enabled = false;
+		}
 	}
 }
