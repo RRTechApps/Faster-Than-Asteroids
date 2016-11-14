@@ -83,14 +83,15 @@ public class ObjectManager : MonoBehaviour {
 				case "EnergyCol":
 					//Make an explosion and destroy target and self
 					break;
-				case "Asteroid":
-					//Make an explosion and spawn a few boxes depending on size of asteroid
-					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
-					Destroy(this.gameObject);
-					break;
-				case "Bullet":
-					//Make an explosion and destroy target and self
-					break;
+			case "Asteroid":
+				//Make an explosion and spawn a few boxes depending on size of asteroid
+				GameObject.Find ("Collectables").GetComponent<CollectableManager> ().spawnBoxes ((int)magnitudeOfActionF / 4, transform.position);
+				GameObject.Find ("ScoreText").GetComponent<ScoreManager> ().asteroidDestroyed ();
+				Destroy(this.gameObject);
+				break;
+			case "Bullet":
+				//Make an explosion and destroy target and self
+				break;
 			}
 		}
 	}
