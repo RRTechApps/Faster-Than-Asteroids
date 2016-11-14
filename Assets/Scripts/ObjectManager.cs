@@ -94,6 +94,8 @@ public class ObjectManager : MonoBehaviour {
 				case "Bullet":
 					//Make an explosion and destroy target and self
 					break;
+			case "Unassigned":
+				break;
 			}
 		}
 	}
