@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour {
 	public float angSpeed;
 	public float maxSpeed;
 	public float turningSpringRate;
+	public float brakingForce;
 
 
 	//Initialization
@@ -42,6 +43,7 @@ public class PlayerManager : MonoBehaviour {
 		float horizontalControl = Input.GetAxis("Horizontal");
 
 		if(verticalControl != 0.0f) {
+			rb.drag = 0;
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)));
 			if(Mathf.Sign(verticalControl) == -1.0f) {
 				horizontalControl *= -1;
@@ -55,8 +57,14 @@ public class PlayerManager : MonoBehaviour {
 			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
 		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			rb.velocity = Vector3.zero;
-			rb.angularVelocity = Vector3.zero;
+			/*rb.velocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;*/
+			var curSpeed = rb.velocity.magnitude;
+			var newSpeed = curSpeed - brakingForce * Time.deltaTime;
+			if (newSpeed < 0) {
+				newSpeed = 0;
+			}
+			rb.velocity = rb.velocity.normalized * newSpeed;
 		}
 		playerCamera.transform.position = this.transform.position + camOffset;
 		playerLight.transform.position = this.transform.position + lightOffset;
