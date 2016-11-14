@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour {
 			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
 			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
 		}
-		if (Input.GetKeyDown (KeyCode.Space)) {
+		if (Input.GetKey (KeyCode.Space)) {
 			/*rb.velocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;*/
 			var curSpeed = rb.velocity.magnitude;
