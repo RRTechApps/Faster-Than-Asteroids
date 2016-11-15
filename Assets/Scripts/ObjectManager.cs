@@ -59,20 +59,21 @@ public class ObjectManager : MonoBehaviour {
 	//Do what the object attached is supposed to do
 	public void performObjectTask(GameObject target){
 		if(target.tag == "Player") {
+			PlayerManager pm = target.GetComponent<PlayerManager>();
 			switch(objectType) {
 				case "HPCol":
-					target.GetComponent<PlayerManager>().updateHealth(magnitudeOfAction);
+					pm.updateHealth(magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "EnergyCol":
-					target.GetComponent<PlayerManager>().updateEnergy(magnitudeOfAction);
+					pm.updateEnergy(magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "Asteroid":
-					target.GetComponent<PlayerManager>().asteroidCollision(magnitudeOfAction);
+					pm.asteroidCollision(magnitudeOfAction);
 					break;
 				case "Bullet":
-					target.GetComponent<PlayerManager>().bulletCollision(magnitudeOfAction);
+					pm.bulletCollision(magnitudeOfAction);
 					break;
 			}
 		} else if(target.tag == "Bullet") {

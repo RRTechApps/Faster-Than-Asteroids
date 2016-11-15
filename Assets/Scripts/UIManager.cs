@@ -6,11 +6,15 @@ public class UIManager : MonoBehaviour {
 
 	private Text[] textObjects;
 	private Image[] imageObjects;
+	private GameObject scoreboard;
 
 	//Initialization
 	void Start () {
 		textObjects = GameObject.FindObjectsOfType<Text>();
 		imageObjects = GameObject.FindObjectsOfType<Image>();
+		scoreboard = GameObject.Find("ScoreboardPanel");
+		scoreboard.SetActive(false);
+
 	}
 
 	//[ClientRpc]
@@ -52,5 +56,21 @@ public class UIManager : MonoBehaviour {
 				imgObj.rectTransform.sizeDelta = newSize;
 			}
 		}
+	}
+
+	public void setScoreboardVisible(bool show){
+		scoreboard.SetActive(show);
+	}
+
+	public void addScoreboardEntry(string name){
+		
+	}
+
+	public void updateScoreboardEntry(string name, int score){
+
+	}
+
+	public void removeScoreboardEntry(string name, int score){
+
 	}
 }

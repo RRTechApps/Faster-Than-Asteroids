@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//DEPRICATED, USE ASTEROIDMANAGER
+
+using UnityEngine;
 using System.Collections;
 
 public class AsteroidSplitter : MonoBehaviour {
