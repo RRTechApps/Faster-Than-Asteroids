@@ -6,14 +6,18 @@ public class UIManager : MonoBehaviour {
 
 	private Text[] textObjects;
 	private Image[] imageObjects;
-	private GameObject scoreboard;
+	private int numAdded;
+
+	public GameObject scoreboard;
+	public GameObject scoreboardPlayerPrefab;
+	public Transform playersTransform;
 
 	//Initialization
 	void Start () {
 		textObjects = GameObject.FindObjectsOfType<Text>();
 		imageObjects = GameObject.FindObjectsOfType<Image>();
-		scoreboard = GameObject.Find("ScoreboardPanel");
 		scoreboard.SetActive(false);
+		numAdded = 0;
 
 	}
 
@@ -61,16 +65,31 @@ public class UIManager : MonoBehaviour {
 	public void setScoreboardVisible(bool show){
 		scoreboard.SetActive(show);
 	}
-
-	public void addScoreboardEntry(string name){
-		
+	//[ClientRpc]
+	//public void RpcAddScoreboardEntry(string name, Color color){
+	public void addScoreboardEntry(string name, Color color){
+		scoreboard.SetActive(true);
+		scoreboard.GetComponent<RectTransform>().sizeDelta += new Vector2(0.0f, 10.0f);
+		scoreboard.transform.Find("VertDivider").gameObject.GetComponent<RectTransform>().sizeDelta += new Vector2(0.0f, 10.0f);
+		scoreboard.SetActive(false);
+		GameObject newScoreboardEntry = Instantiate(scoreboardPlayerPrefab, playersTransform, false) as GameObject;
+		newScoreboardEntry.name = name;
+		newScoreboardEntry.GetComponent<Text>().text = name;
+		newScoreboardEntry.transform.localPosition = (new Vector3(-65.0f, -5.0f - numAdded * 10.0f, 0.0f));
+		newScoreboardEntry.transform.Find("PlayerBackground").gameObject.GetComponent<Image>().color = color;
+		numAdded++;
 	}
 
+	//[ClientRpc]
+	//public void RpcUpdateScoreboardEntry(string name, int score){
 	public void updateScoreboardEntry(string name, int score){
+		playersTransform.Find(name).Find("PlayerScore").GetComponent<Text>().text = score + "";
 
 	}
 
-	public void removeScoreboardEntry(string name, int score){
-
+	//[ClientRpc]
+	//public void RpcRemoveScoreboardEntry(string name){
+	public void removeScoreboardEntry(string name){
+		Destroy(playersTransform.Find(name).gameObject);
 	}
 }

@@ -8,13 +8,13 @@ public class PlayerManager : MonoBehaviour {
 	private int energy;
 	private int maxHealth;
 	private int maxEnergy;
+	private float rotation;
 	private string playerName;
 	private Rigidbody rb;
-	private Transform hostTransform;
 	private Vector3 camOffset;
 	private Vector3 lightOffset;
 	private UIManager ui;
-	private float rotation;
+	private Color team;
 
 	public Camera playerCamera;
 	public GameObject playerLight;
@@ -36,7 +36,6 @@ public class PlayerManager : MonoBehaviour {
 		lightOffset = playerLight.transform.position;
 		//Front of the player model
 		rotation = 0.0f;
-		hostTransform = this.transform.parent;
 		ui = GameObject.Find("UIObjects").GetComponent<UIManager>();
 	}
 

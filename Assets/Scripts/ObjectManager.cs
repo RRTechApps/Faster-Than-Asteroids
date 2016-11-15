@@ -6,14 +6,15 @@ public class ObjectManager : MonoBehaviour {
 	private string objectType;
 	private int magnitudeOfAction;
 	private float magnitudeOfActionF;
-	private Rigidbody rb;
+	//Probably won't need this
+	//private Rigidbody rb;
 	private bool destroyOnExit;
 	private Vector3 gameFieldRadius;
 
 	//Initialization
 	void Start(){
 		objectType = this.tag;
-		rb = this.GetComponent<Rigidbody>();
+		//rb = this.GetComponent<Rigidbody>();
 		destroyOnExit = true;
 		if(objectType == "Asteroid") {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
