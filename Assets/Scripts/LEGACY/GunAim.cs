@@ -9,7 +9,7 @@ public class GunAim : MonoBehaviour {
 	private Vector3 rayHitWorldPosition;
 	// Use this for initialization
 	void Start () {
-		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 	}
 
 	// Update is called once per frame

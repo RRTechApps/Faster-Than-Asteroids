@@ -6,14 +6,15 @@ public class ObjectManager : MonoBehaviour {
 	private string objectType;
 	private int magnitudeOfAction;
 	private float magnitudeOfActionF;
-	private Rigidbody rb;
+	//Probably won't need this
+	//private Rigidbody rb;
 	private bool destroyOnExit;
 	private Vector3 gameFieldRadius;
 
 	//Initialization
 	void Start(){
 		objectType = this.tag;
-		rb = this.GetComponent<Rigidbody>();
+		//rb = this.GetComponent<Rigidbody>();
 		destroyOnExit = true;
 		if(objectType == "Asteroid") {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
@@ -59,20 +60,21 @@ public class ObjectManager : MonoBehaviour {
 	//Do what the object attached is supposed to do
 	public void performObjectTask(GameObject target){
 		if(target.tag == "Player") {
+			PlayerManager pm = target.GetComponent<PlayerManager>();
 			switch(objectType) {
 				case "HPCol":
-					target.GetComponent<PlayerManager>().updateHealth(magnitudeOfAction);
+					pm.updateHealth(magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "EnergyCol":
-					target.GetComponent<PlayerManager>().updateEnergy(magnitudeOfAction);
+					pm.updateEnergy(magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "Asteroid":
-					target.GetComponent<PlayerManager>().asteroidCollision(magnitudeOfAction);
+					pm.asteroidCollision(magnitudeOfAction);
 					break;
 				case "Bullet":
-					target.GetComponent<PlayerManager>().bulletCollision(magnitudeOfAction);
+					pm.bulletCollision(magnitudeOfAction);
 					break;
 			}
 		} else if(target.tag == "Bullet") {
@@ -83,15 +85,15 @@ public class ObjectManager : MonoBehaviour {
 				case "EnergyCol":
 					//Make an explosion and destroy target and self
 					break;
-			case "Asteroid":
-				//Make an explosion and spawn a few boxes depending on size of asteroid
-				GameObject.Find ("Collectables").GetComponent<CollectableManager> ().spawnBoxes ((int)magnitudeOfActionF / 4, transform.position);
-				GameObject.Find ("ScoreText").GetComponent<ScoreManager> ().asteroidDestroyed ();
-				Destroy(this.gameObject);
-				break;
-			case "Bullet":
-				//Make an explosion and destroy target and self
-				break;
+				case "Asteroid":
+					//Make an explosion and spawn a few boxes depending on size of asteroid
+					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
+					GameObject.Find("Asteroids").GetComponent<AsteroidManager>().AddAsteroid();
+					Destroy(this.gameObject);
+					break;
+				case "Bullet":
+					//Make an explosion and destroy target and self
+					break;
 			}
 		}
 	}
