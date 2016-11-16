@@ -40,7 +40,6 @@ public class PlayerManager : MonoBehaviour {
 		//Original offset of the light
 		lightOffset = playerLight.transform.position;
 		ui = transform.parent.Find("UIObjects").GetComponent<UIManager>();
-		ui.addScoreboardEntry("kenny", new Color(1.0f, 0.4f, 0.4f, 0.4f));
 	}
 
 	//Movement is done here
@@ -108,7 +107,8 @@ public class PlayerManager : MonoBehaviour {
 		energy += magnitude;
 		energy = Mathf.Min(energy, maxEnergy);
 		ui.updateImage("EnergyBarPositive", new Vector2(energy, 10.0f));
-		ui.updateText("EnergyText", "Energy: " + energy + "/" + maxEnergy);	}
+		ui.updateText("EnergyText", "Energy: " + energy + "/" + maxEnergy);	
+	}
 
 	public void asteroidCollision(int magnitude){
 		//Make the player blow up if asteroid big enough?
