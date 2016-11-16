@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour {
 	private int maxHealth;
 	private int maxEnergy;
 	private float rotation;
+	private bool localPause;
 	private string playerName;
 	private Rigidbody rb;
 	private Vector3 camOffset;
@@ -28,15 +29,17 @@ public class PlayerManager : MonoBehaviour {
 		energy = 100;
 		maxHealth = 100;
 		maxEnergy = 100;
+		//Front of the player model
+		rotation = 0.0f;
+		//If the player is in the "pause" menu
+		localPause = false;
 		//Player's rigidbody
 		rb = GetComponent<Rigidbody>();
 		//Original offset of the camera
 		camOffset = playerCamera.transform.position;
 		//Original offset of the light
 		lightOffset = playerLight.transform.position;
-		//Front of the player model
-		rotation = 0.0f;
-		ui = GameObject.Find("UIObjects").GetComponent<UIManager>();
+		ui = transform.parent.Find("UIObjects").GetComponent<UIManager>();
 	}
 
 	//Movement is done here
@@ -60,6 +63,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void Update(){
+		//Debug key for stopping
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			Debug.Log("Velocity: " + rb.velocity);
 			Debug.Log("Rel Velocity: " + new Vector3(rb.velocity.x * Mathf.Sin(rotation), 0.0f, rb.velocity.z * Mathf.Cos(rotation)));
@@ -68,7 +72,12 @@ public class PlayerManager : MonoBehaviour {
 			updateHealth(-10);
 			updateEnergy(-15);
 		}
+		//Scoreboard
 		ui.setScoreboardVisible(Input.GetKey(KeyCode.Tab));
+		//Pause Menu (Doesn't actually pause the game)
+		if(Input.GetKeyDown(KeyCode.Escape)) {
+			ui.togglePauseMenuVisible();
+		}
 	}
 
 	void onTriggerEnter(Collider target){

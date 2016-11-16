@@ -4,21 +4,27 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour {
 
+	private int numAdded;
+	private bool localPause;
 	private Text[] textObjects;
 	private Image[] imageObjects;
-	private int numAdded;
+	private Transform changePanel;
 
 	public GameObject scoreboard;
 	public GameObject scoreboardPlayerPrefab;
 	public Transform playersTransform;
+	public GameObject pauseMenu;
 
 	//Initialization
 	void Start () {
-		textObjects = GameObject.FindObjectsOfType<Text>();
-		imageObjects = GameObject.FindObjectsOfType<Image>();
-		scoreboard.SetActive(false);
+		localPause = false;
 		numAdded = 0;
-
+		changePanel = pauseMenu.transform.Find("ChangePanel");
+		textObjects = this.FindObjectsOfType<Text>();
+		imageObjects = this.FindObjectsOfType<Image>();
+		scoreboard.SetActive(false);
+		pauseMenu.SetActive(false);
+		changePanel.gameObject.SetActive(false);
 	}
 
 	//[ClientRpc]
@@ -91,5 +97,39 @@ public class UIManager : MonoBehaviour {
 	//public void RpcRemoveScoreboardEntry(string name){
 	public void removeScoreboardEntry(string name){
 		Destroy(playersTransform.Find(name).gameObject);
+	}
+
+	public void togglePauseMenuVisible(){
+		localPause = !localPause;
+		pauseMenu.SetActive(localPause);
+	}
+
+	public bool getLocalPause(){
+		return localPause;
+	}
+
+	public void onResumeButton(){
+		togglePauseMenuVisible();
+	}
+
+	public void onTeamButton(){
+		changePanel.gameObject.SetActive(true);
+		changePanel.Find("TeamSelect").gameObject.SetActive(true);
+	}
+
+	public void onNameButton(){
+		changePanel.gameObject.SetActive(true);
+		changePanel.Find("NameInput").gameObject.SetActive(true);
+	}
+
+	public void onDoneButton(){
+		//TODO: Add code to send name change or color change to playermanager
+		changePanel.gameObject.SetActive(false);
+		changePanel.Find("NameInput").gameObject.SetActive(false);
+		changePanel.Find("TeamSelect").gameObject.SetActive(false);
+	}
+
+	public void onQuitButton(){
+
 	}
 }
