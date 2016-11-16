@@ -23,7 +23,14 @@ public class UIManager : MonoBehaviour {
 		textObjects = this.FindObjectsOfType<Text>();
 		imageObjects = this.FindObjectsOfType<Image>();
 		scoreboard.SetActive(false);
+		//Assigning buttons
+		pauseMenu.transform.Find("ResumeButton").GetComponent<Button>().onClick.AddListener(() => onResumeButton());
+		pauseMenu.transform.Find("TeamButton").GetComponent<Button>().onClick.AddListener(() => onTeamButton());
+		pauseMenu.transform.Find("NameButton").GetComponent<Button>().onClick.AddListener(() => onNameButton());
+		pauseMenu.transform.Find("QuitButton").GetComponent<Button>().onClick.AddListener(() => onQuitButton());
+		changePanel.transform.Find("DoneButton").GetComponent<Button>().onClick.AddListener(() => onDoneButton());
 		pauseMenu.SetActive(false);
+
 		changePanel.gameObject.SetActive(false);
 	}
 
@@ -115,21 +122,23 @@ public class UIManager : MonoBehaviour {
 	public void onTeamButton(){
 		changePanel.gameObject.SetActive(true);
 		changePanel.Find("TeamSelect").gameObject.SetActive(true);
+		changePanel.Find("NameInput").gameObject.SetActive(false);
 	}
 
 	public void onNameButton(){
 		changePanel.gameObject.SetActive(true);
 		changePanel.Find("NameInput").gameObject.SetActive(true);
+		changePanel.Find("TeamSelect").gameObject.SetActive(false);
 	}
 
 	public void onDoneButton(){
 		//TODO: Add code to send name change or color change to playermanager
-		changePanel.gameObject.SetActive(false);
 		changePanel.Find("NameInput").gameObject.SetActive(false);
 		changePanel.Find("TeamSelect").gameObject.SetActive(false);
+		changePanel.gameObject.SetActive(false);
 	}
 
 	public void onQuitButton(){
-
+		//TODO: Add code to quit the game
 	}
 }

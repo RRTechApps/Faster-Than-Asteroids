@@ -40,6 +40,7 @@ public class PlayerManager : MonoBehaviour {
 		//Original offset of the light
 		lightOffset = playerLight.transform.position;
 		ui = transform.parent.Find("UIObjects").GetComponent<UIManager>();
+		ui.addScoreboardEntry("kenny", new Color(1.0f, 0.4f, 0.4f, 0.4f));
 	}
 
 	//Movement is done here
