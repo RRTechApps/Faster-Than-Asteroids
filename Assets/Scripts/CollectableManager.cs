@@ -25,20 +25,23 @@ public class CollectableManager : MonoBehaviour {
 	void Start () {
 		boxAmounts = new int[] {5, 10, 25, 50};
 		boxAmountsChance = new int[] {30, 40, 20, 10};
+		//boxAmountsChance = new int[] {10, 20, 40, 30};
 		//boxesOnField = new int[] {20, 20};	Don't think we will use this anymore :(
 		boxSpawnRadius = 3.0f;
 	}
 
 	//Defined functions
 
+	//TODO: The amount is almost always 50... ????
 	public void spawnBoxes(int amount, Vector3 around){
 		for(int i = 0; i < amount; i++) {
-			//Generate amount of the box
+			//Generate amount for the box
 			int chance = Random.Range(0, 101);
 			int boxAmount = 0;
-			for(int j = 0; j < 4; j++){
+			for(int j = 0; j < boxAmounts.Length; j++){
 				if((chance -= boxAmountsChance[j]) < 0) {
 					boxAmount = boxAmounts[j];
+					break;
 				}
 			}
 			//Where the box will be located
