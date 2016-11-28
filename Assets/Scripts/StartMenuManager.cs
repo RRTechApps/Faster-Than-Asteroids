@@ -30,7 +30,6 @@ public class StartMenuManager : MonoBehaviour {
 		joinHostButtonText = joinHostButton.GetComponentInChildren<Text>();
 		lastIPText = "";
 		lastChar = "";
-
 		ipInput.SetActive(false);
 		nameInput.SetActive(false);
 		joinHostButton.SetActive(false);
@@ -44,6 +43,8 @@ public class StartMenuManager : MonoBehaviour {
 
 	//Disables all UI elements other than the ip input, name input, join button, and the back button
 	public void onJoinServerButton(){
+		nameInput.GetComponent<InputField>().text = "";
+		ipInput.GetComponent<InputField>().text = "";
 		joinHostButtonText.text = "Join";
 		joinServerButton.SetActive(false);
 		hostServerButton.SetActive(false);
@@ -56,6 +57,8 @@ public class StartMenuManager : MonoBehaviour {
 
 	//Disables all UI elements other than the name input, host button, and the back button
 	public void onHostServerButton(){
+		nameInput.GetComponent<InputField>().text = "";
+		ipInput.GetComponent<InputField>().text = "";
 		joinHostButtonText.text = "Host";
 		joinServerButton.SetActive(false);
 		hostServerButton.SetActive(false);
@@ -93,9 +96,14 @@ public class StartMenuManager : MonoBehaviour {
 		backButton.SetActive(false);
 	}
 	public void onIPTextChange(string text){
-		string addedChar = lastIPText.Length - text.Length > 0 ? "BS" : text.Substring(text.Length - 1);
-		//Truncates any 0s
-		if(lastChar.Equals("0") && addedChar.Equals("0")) {
+		string addedChar = lastIPText.Length - text.Length > 0 ? "BS" : text.Length < 1 ? "" : text.Substring(text.Length - 1);
+		if(addedChar.Equals("BS")) {
+			lastChar = "";
+			lastIPText = text;
+			return;
+		}
+		//Truncates any 0s and prevents invalid characters (anything other than \d, 0-9)
+		if((lastChar.Equals("0") && addedChar.Equals("0")) || Regex.IsMatch(addedChar, "[^\\.\\d]")) {
 			ipInputField.text = lastIPText;
 			return;
 		}
