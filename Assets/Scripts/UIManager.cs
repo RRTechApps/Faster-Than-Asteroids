@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour {
 	//public void RpcUpdateText(string textObjName, string newText){
 	public void updateText(string textObjName, string newText){
 		foreach(Text textObj in textObjects) {
-			if(textObj.name == textObjName) {
+			if(textObj.name.Equals(textObjName)) {
 				textObj.text = newText;
 			}
 		}
@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour {
 	//public void RpcUpdateImage(string imgObjName, Material newMaterial){
 	public void updateImage(string imgObjName, Material newMaterial){
 		foreach(Image imgObj in imageObjects) {
-			if(imgObj.name == imgObjName) {
+			if(imgObj.name.Equals(imgObj)){
 				imgObj.material = newMaterial;
 			}
 		}
@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour {
 	//public void RpcUpdateImage(string imgObjName, Vector2 newSize){
 	public void updateImage(string imgObjName, Vector2 newSize){
 		foreach(Image imgObj in imageObjects) {
-			if(imgObj.name == imgObjName) {
+			if(imgObj.name.Equals(imgObj)){
 				imgObj.rectTransform.sizeDelta = newSize;
 			}
 		}
@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour {
 	//public void RpcUpdateImage(string imgObjName, Material newMaterial, Vector2 newSize){
 	public void updateImage(string imgObjName, Material newMaterial, Vector2 newSize){
 		foreach(Image imgObj in imageObjects) {
-			if(imgObj.name == imgObjName) {
+			if(imgObj.name.Equals(imgObj)){
 				imgObj.material = newMaterial;
 				imgObj.rectTransform.sizeDelta = newSize;
 			}

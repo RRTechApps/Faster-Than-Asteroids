@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 	//[SyncVar(hook=onHealthChange)]
@@ -16,6 +17,9 @@ public class PlayerManager : MonoBehaviour {
 	private Vector3 lightOffset;
 	private UIManager ui;
 	private Color team;
+	private Dictionary<string, object> controls;
+	private Dictionary<string, object> lastControls;
+	private ShieldManager shieldManager;
 
 	public Camera playerCamera;
 	public GameObject playerLight;
@@ -40,13 +44,32 @@ public class PlayerManager : MonoBehaviour {
 		//Original offset of the light
 		lightOffset = playerLight.transform.position;
 		ui = transform.parent.Find("UIObjects").GetComponent<UIManager>();
+		shieldManager = transform.Find("Shield").gameObject.GetComponent<ShieldManager>();
+		controls = new Dictionary<string, object>();
+		lastControls = new Dictionary<string, object>();
+		controls.Add("x", 0.0f);
+		controls.Add("y", 0.0f);
+		controls.Add("shoot", false);
+		controls.Add("debug", false);
+		controls.Add("shield", false);
+		controls.Add("menu", false);
+		controls.Add("scoreboard", false);
+
+		lastControls.Add("x", 0.0f);
+		lastControls.Add("y", 0.0f);
+		lastControls.Add("shoot", false);
+		lastControls.Add("debug", false);
+		lastControls.Add("shield", false);
+		lastControls.Add("menu", false);
+		lastControls.Add("scoreboard", false);
+
 	}
 
 	//Movement is done here
 	void FixedUpdate () {
 		rotation = this.transform.eulerAngles.y * Mathf.Deg2Rad;
-		float verticalControl = Input.GetAxis("Vertical");
-		float horizontalControl = Input.GetAxis("Horizontal");
+		float horizontalControl = (float)controls["x"];
+		float verticalControl = (float)controls["y"];
 
 		if(verticalControl != 0.0f) {
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)));
@@ -63,8 +86,16 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void Update(){
-		//Debug key for stopping
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		//Get control keys
+		controls["x"] = Input.GetAxis("Horizontal");
+		controls["y"] = Input.GetAxis("Vertical");
+		controls["shoot"] = Input.GetMouseButton(0);
+		controls["debug"] = Input.GetKey(KeyCode.O);
+		controls["shield"] = Input.GetKey(KeyCode.Space);
+		controls["menu"] = Input.GetKey(KeyCode.Escape);
+		controls["scoreboard"] = Input.GetKey(KeyCode.Tab);
+		//Debug key
+		if ((bool)controls["debug"]) {
 			Debug.Log("Velocity: " + rb.velocity);
 			Debug.Log("Rel Velocity: " + new Vector3(rb.velocity.x * Mathf.Sin(rotation), 0.0f, rb.velocity.z * Mathf.Cos(rotation)));
 			rb.velocity = Vector3.zero;
@@ -72,12 +103,24 @@ public class PlayerManager : MonoBehaviour {
 			updateHealth(-10);
 			updateEnergy(-15);
 		}
+		//Turn on the shield
+		if((bool)controls["shield"] && !(bool)lastControls["shield"]) {
+			shieldManager.toggleShield();
+			Debug.Log("toggle shield");
+		}
 		//Scoreboard
-		ui.setScoreboardVisible(Input.GetKey(KeyCode.Tab));
+		ui.setScoreboardVisible((bool)controls["scoreboard"]);
 		//Pause Menu (Doesn't actually pause the game)
-		if(Input.GetKeyDown(KeyCode.Escape)) {
+		if((bool)controls["menu"]) {
 			ui.togglePauseMenuVisible();
 		}
+		lastControls["x"] = controls["x"];
+		lastControls["y"] = controls["y"];
+		lastControls["shoot"] = controls["shoot"];
+		lastControls["debug"] = controls["debug"];
+		lastControls["shield"] = controls["shield"];
+		lastControls["menu"] = controls["menu"];
+		lastControls["scoreboard"] = controls["scoreboard"];
 	}
 
 	void onTriggerEnter(Collider target){

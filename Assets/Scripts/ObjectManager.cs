@@ -10,17 +10,21 @@ public class ObjectManager : MonoBehaviour {
 	//private Rigidbody rb;
 	private bool destroyOnExit;
 	private Vector3 gameFieldRadius;
+	private AsteroidManager asteroidManager;
+	private CollectableManager collectableManager;
 
 	//Initialization
 	void Start(){
 		objectType = this.tag;
 		//rb = this.GetComponent<Rigidbody>();
 		destroyOnExit = true;
-		if(objectType == "Asteroid") {
+		if(objectType.Equals("Asteroid")) {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
 			this.transform.localScale.Scale(scaleBy);
 		}
 		gameFieldRadius = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldRadius();
+		asteroidManager = GameObject.Find("Asteroids").GetComponent<AsteroidManager>();
+		collectableManager = GameObject.Find("Collectables").GetComponent<CollectableManager>();
 	}
 
 	//For the destroyOnExit flag
@@ -33,7 +37,7 @@ public class ObjectManager : MonoBehaviour {
 			if(gameFieldRadius.x - Mathf.Abs(x) < 0 || gameFieldRadius.z - Mathf.Abs(z) < 0) {
 				Destroy(this.gameObject);
 				if(this.objectType.Equals("Asteroid")) {
-					GameObject.Find("Asteroids").GetComponent<AsteroidManager>().AddAsteroid();
+					asteroidManager.AddAsteroid();
 				}
 			}
 		}
@@ -59,7 +63,7 @@ public class ObjectManager : MonoBehaviour {
 
 	//Do what the object attached is supposed to do
 	public void performObjectTask(GameObject target){
-		if(target.tag == "Player") {
+		if(target.tag.Equals("Player")){
 			PlayerManager pm = target.GetComponent<PlayerManager>();
 			switch(objectType) {
 				case "HPCol":
@@ -77,7 +81,7 @@ public class ObjectManager : MonoBehaviour {
 					pm.bulletCollision(magnitudeOfAction);
 					break;
 			}
-		} else if(target.tag == "Bullet") {
+		} else if(target.tag.Equals("Bullet")){
 			switch(objectType) {
 				case "HPCol":
 					//Make an explosion and destroy target and self
@@ -87,15 +91,23 @@ public class ObjectManager : MonoBehaviour {
 					break;
 				case "Asteroid":
 					//Make an explosion and spawn a few boxes depending on size of asteroid
-					GameObject.Find("Collectables").GetComponent<CollectableManager>().spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
-					GameObject.Find("Asteroids").GetComponent<AsteroidManager>().AddAsteroid();
+					collectableManager.spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
+					asteroidManager.AddAsteroid();
 					Destroy(this.gameObject);
 					break;
 				case "Bullet":
 					//Make an explosion and destroy target and self
 					break;
-			case "Unassigned":
-				break;
+				case "Unassigned":
+					break;
+			}
+		} else if(target.tag.Equals("Shield")) {
+			Debug.Log("Shield Collide");
+			ShieldManager shield = target.gameObject.GetComponent<ShieldManager>();
+			switch(objectType) {
+				case "Asteroid":
+					shield.asteroidCollision(this.gameObject);
+					break;
 			}
 		}
 	}

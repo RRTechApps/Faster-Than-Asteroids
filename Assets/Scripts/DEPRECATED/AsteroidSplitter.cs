@@ -9,7 +9,7 @@ public class AsteroidSplitter : MonoBehaviour {
 	public float splitSpeed;
 
 	void OnTriggerEnter (Collider other) {
-		if(other.gameObject.tag =="Bullet")
+		if(other.gameObject.tag.Equals("Bullet"))
 		{
 			GameObject.Destroy (other.gameObject);
 			int splits = Random.Range (2, 4);
