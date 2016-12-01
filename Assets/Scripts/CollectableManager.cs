@@ -5,9 +5,6 @@ public class CollectableManager : MonoBehaviour {
 	//This script should go on an empty gameObject located in the middle of the game field, and is used to manage collectables ([re]spawning them)
 	//There should only be one instance of this script per client/server
 
-	//Type of collectable
-	//public enum Types {HP, Energy};			//Don't need this since boxes randomly spawned I guess :(
-
 	public GameObject hpBoxPrefab;
 	public GameObject energyBoxPrefab;
 
@@ -15,24 +12,19 @@ public class CollectableManager : MonoBehaviour {
 	private int[] boxAmounts;
 	//Chance per each box amount to be spawned
 	private int[] boxAmountsChance;
-	//# boxes per each type to be on field		Don't think we will use this anymore :(
-	//private int[] boxesOnField;
 	//Radius for boxes to spawn around
 	private float boxSpawnRadius;
 	private float respawnTime;
 
-	// Use this for initialization
+	//Initialization
 	void Start () {
 		boxAmounts = new int[] {5, 10, 25, 50};
 		boxAmountsChance = new int[] {30, 40, 20, 10};
-		//boxAmountsChance = new int[] {10, 20, 40, 30};
-		//boxesOnField = new int[] {20, 20};	Don't think we will use this anymore :(
 		boxSpawnRadius = 3.0f;
 	}
 
 	//Defined functions
 
-	//TODO: The amount is almost always 50... ????
 	public void spawnBoxes(int amount, Vector3 around){
 		for(int i = 0; i < amount; i++) {
 			//Generate amount for the box

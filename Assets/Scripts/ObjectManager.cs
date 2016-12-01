@@ -2,12 +2,11 @@
 using System.Collections;
 
 public class ObjectManager : MonoBehaviour {
+	//This script belongs on every spawned prefab and controls its collider
 	
 	private string objectType;
 	private int magnitudeOfAction;
 	private float magnitudeOfActionF;
-	//Probably won't need this
-	//private Rigidbody rb;
 	private bool destroyOnExit;
 	private Vector3 gameFieldRadius;
 	private AsteroidManager asteroidManager;
@@ -16,7 +15,6 @@ public class ObjectManager : MonoBehaviour {
 	//Initialization
 	void Start(){
 		objectType = this.tag;
-		//rb = this.GetComponent<Rigidbody>();
 		destroyOnExit = true;
 		if(objectType.Equals("Asteroid")) {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
@@ -84,19 +82,19 @@ public class ObjectManager : MonoBehaviour {
 		} else if(target.tag.Equals("Bullet")){
 			switch(objectType) {
 				case "HPCol":
-					//Make an explosion and destroy target and self
+					//TODO: Make an explosion and destroy target and self
 					break;
 				case "EnergyCol":
-					//Make an explosion and destroy target and self
+					//TODO: Make an explosion and destroy target and self
 					break;
 				case "Asteroid":
-					//Make an explosion and spawn a few boxes depending on size of asteroid
+					//TODO: Make an explosion and spawn a few boxes depending on size of asteroid
 					collectableManager.spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
 					asteroidManager.AddAsteroid();
 					Destroy(this.gameObject);
 					break;
 				case "Bullet":
-					//Make an explosion and destroy target and self
+					//TODO: Make an explosion and destroy target and self
 					break;
 				case "Unassigned":
 					break;

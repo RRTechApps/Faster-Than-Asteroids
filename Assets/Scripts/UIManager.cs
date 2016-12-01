@@ -3,6 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : MonoBehaviour {
+	//This script belongs on the main canvas of the player and controls all UI elements.
+
+	public GameObject scoreboard;
+	public GameObject scoreboardPlayerPrefab;
+	public Transform playersTransform;
+	public GameObject pauseMenu;
 
 	private int numAdded;
 	private bool localPause;
@@ -10,10 +16,6 @@ public class UIManager : MonoBehaviour {
 	private Image[] imageObjects;
 	private Transform changePanel;
 
-	public GameObject scoreboard;
-	public GameObject scoreboardPlayerPrefab;
-	public Transform playersTransform;
-	public GameObject pauseMenu;
 
 	//Initialization
 	void Start () {

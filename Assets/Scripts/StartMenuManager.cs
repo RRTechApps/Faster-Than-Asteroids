@@ -4,7 +4,9 @@ using System.Collections;
 using System.Text.RegularExpressions;
 
 public class StartMenuManager : MonoBehaviour {
-	
+	//Controls behavior of the start menu.
+	//Will link with the maingame scene once connected.
+
 	private GameObject joinServerButton;
 	private GameObject hostServerButton;
 	private GameObject helpButton;
@@ -17,7 +19,7 @@ public class StartMenuManager : MonoBehaviour {
 	private string lastIPText;
 	private string lastChar;
 
-	// Use this for initialization
+	//Initialization
 	void Start () {
 		joinServerButton = transform.Find("JoinServerButton").gameObject;
 		hostServerButton = transform.Find("HostServerButton").gameObject;
@@ -78,9 +80,9 @@ public class StartMenuManager : MonoBehaviour {
 		if(joinHostButtonText.text.Equals("Join")) {
 			
 			if(Regex.IsMatch(lastIPText, "(([1][0-9][0-9]|2[0-4][0-9]|25[0-5]|[0-9][0-9]?)\\.){3}([1][0-9][0-9]|2[0-4][0-9]|25[0-5]|[0-9][0-9]?)")) {
-				//Connect here and change scene
+				//TODO: Connect here and change scene
 			} else {
-				//Display invalid IP text/image
+				//TODO: Display invalid IP text/image
 			}
 		}
 	}
@@ -102,7 +104,7 @@ public class StartMenuManager : MonoBehaviour {
 			lastIPText = text;
 			return;
 		}
-		//Truncates any 0s and prevents invalid characters (anything other than \d, 0-9)
+		//Truncates any 0s and prevents invalid characters (anything other than digits and periods)
 		if((lastChar.Equals("0") && addedChar.Equals("0")) || Regex.IsMatch(addedChar, "[^\\.\\d]")) {
 			ipInputField.text = lastIPText;
 			return;

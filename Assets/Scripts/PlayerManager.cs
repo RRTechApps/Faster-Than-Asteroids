@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
+	//This script belongs on the PlayerModel gameobject and controls the position of the player.
+	
+	public Camera playerCamera;
+	public GameObject playerLight;
+	public float speed;
+	public float angSpeed;
+
 	//[SyncVar(hook=onHealthChange)]
 	private int health;
 	//[SyncVar(hook=onEnergyChange)]
@@ -20,12 +27,6 @@ public class PlayerManager : MonoBehaviour {
 	private Dictionary<string, object> controls;
 	private Dictionary<string, object> lastControls;
 	private ShieldManager shieldManager;
-
-	public Camera playerCamera;
-	public GameObject playerLight;
-	public float speed;
-	public float angSpeed;
-
 
 	//Initialization
 	void Start () {
@@ -47,14 +48,6 @@ public class PlayerManager : MonoBehaviour {
 		shieldManager = transform.Find("Shield").gameObject.GetComponent<ShieldManager>();
 		controls = new Dictionary<string, object>();
 		lastControls = new Dictionary<string, object>();
-		controls.Add("x", 0.0f);
-		controls.Add("y", 0.0f);
-		controls.Add("shoot", false);
-		controls.Add("debug", false);
-		controls.Add("shield", false);
-		controls.Add("menu", false);
-		controls.Add("scoreboard", false);
-
 		lastControls.Add("x", 0.0f);
 		lastControls.Add("y", 0.0f);
 		lastControls.Add("shoot", false);
@@ -62,7 +55,7 @@ public class PlayerManager : MonoBehaviour {
 		lastControls.Add("shield", false);
 		lastControls.Add("menu", false);
 		lastControls.Add("scoreboard", false);
-
+		updateControls(controls);
 	}
 
 	//Movement is done here
@@ -87,15 +80,9 @@ public class PlayerManager : MonoBehaviour {
 
 	void Update(){
 		//Get control keys
-		controls["x"] = Input.GetAxis("Horizontal");
-		controls["y"] = Input.GetAxis("Vertical");
-		controls["shoot"] = Input.GetMouseButton(0);
-		controls["debug"] = Input.GetKey(KeyCode.O);
-		controls["shield"] = Input.GetKey(KeyCode.Space);
-		controls["menu"] = Input.GetKey(KeyCode.Escape);
-		controls["scoreboard"] = Input.GetKey(KeyCode.Tab);
+		updateControls(controls);
 		//Debug key
-		if ((bool)controls["debug"]) {
+		if ((bool)controls["debug"] && !(bool)lastControls["debug"]) {
 			Debug.Log("Velocity: " + rb.velocity);
 			Debug.Log("Rel Velocity: " + new Vector3(rb.velocity.x * Mathf.Sin(rotation), 0.0f, rb.velocity.z * Mathf.Cos(rotation)));
 			rb.velocity = Vector3.zero;
@@ -108,11 +95,12 @@ public class PlayerManager : MonoBehaviour {
 			shieldManager.toggleShield();
 			Debug.Log("toggle shield");
 		}
-		//Scoreboard
+		//Show scoreboard while key is pressed
 		ui.setScoreboardVisible((bool)controls["scoreboard"]);
 		//Pause Menu (Doesn't actually pause the game)
-		if((bool)controls["menu"]) {
+		if((bool)controls["menu"] && !(bool)lastControls["menu"]) {
 			ui.togglePauseMenuVisible();
+			localPause = !localPause;
 		}
 		lastControls["x"] = controls["x"];
 		lastControls["y"] = controls["y"];
@@ -138,6 +126,18 @@ public class PlayerManager : MonoBehaviour {
 	}*/
 
 	//Defined Functions
+
+	//TODO: allow different keys to be set
+	//Uodates controls to the current input
+	private void updateControls(Dictionary<string, object> controlDict){
+		controlDict["x"] = Input.GetAxis("Horizontal");
+		controlDict["y"] = Input.GetAxis("Vertical");
+		controlDict["shoot"] = Input.GetMouseButton(0);
+		controlDict["debug"] = Input.GetKey(KeyCode.O);
+		controlDict["shield"] = Input.GetKey(KeyCode.Space);
+		controlDict["menu"] = Input.GetKey(KeyCode.Escape);
+		controlDict["scoreboard"] = Input.GetKey(KeyCode.Tab);
+	}
 
 	public void updateHealth(int magnitude){
 		health += magnitude;
