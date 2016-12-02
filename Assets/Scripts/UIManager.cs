@@ -22,8 +22,8 @@ public class UIManager : MonoBehaviour {
 		localPause = false;
 		numAdded = 0;
 		changePanel = pauseMenu.transform.Find("ChangePanel");
-		textObjects = this.FindObjectsOfType<Text>();
-		imageObjects = this.FindObjectsOfType<Image>();
+		textObjects = FindObjectsOfType<Text>();
+		imageObjects = FindObjectsOfType<Image>();
 		scoreboard.SetActive(false);
 		//Assigning buttons
 		pauseMenu.transform.Find("ResumeButton").GetComponent<Button>().onClick.AddListener(() => onResumeButton());

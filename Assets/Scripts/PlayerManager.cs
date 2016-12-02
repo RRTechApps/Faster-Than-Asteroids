@@ -16,6 +16,9 @@ public class PlayerManager : MonoBehaviour {
 	private int energy;
 	private int maxHealth;
 	private int maxEnergy;
+	//[SyncVar(hook=onScoreChange)]
+	private int score;
+	private float queuedEnergy;
 	private float rotation;
 	private bool localPause;
 	private string playerName;
@@ -34,6 +37,7 @@ public class PlayerManager : MonoBehaviour {
 		energy = 100;
 		maxHealth = 100;
 		maxEnergy = 100;
+		score = 0;
 		//Front of the player model
 		rotation = 0.0f;
 		//If the player is in the "pause" menu
@@ -56,6 +60,8 @@ public class PlayerManager : MonoBehaviour {
 		lastControls.Add("menu", false);
 		lastControls.Add("scoreboard", false);
 		updateControls(controls);
+		playerName = "Debgger";
+		ui.addScoreboardEntry(playerName, Color.red);
 	}
 
 	//Movement is done here
@@ -74,13 +80,27 @@ public class PlayerManager : MonoBehaviour {
 			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
 			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
 		}
-		playerCamera.transform.position = this.transform.position + camOffset;
-		playerLight.transform.position = this.transform.position + lightOffset;
 	}
 
 	void Update(){
+		playerCamera.transform.position = this.transform.position + camOffset;
+		playerLight.transform.position = this.transform.position + lightOffset;
 		//Get control keys
 		updateControls(controls);
+		//Turn on the shield
+		if((bool)controls["shield"] && !(bool)lastControls["shield"]) {
+			shieldManager.toggleShield();
+		}
+			
+		//Show scoreboard while key is pressed
+		ui.setScoreboardVisible((bool)controls["scoreboard"]);
+
+		//Pause Menu (Doesn't actually pause the game)
+		if((bool)controls["menu"] && !(bool)lastControls["menu"]) {
+			ui.togglePauseMenuVisible();
+			localPause = !localPause;
+		}
+
 		//Debug key
 		if ((bool)controls["debug"] && !(bool)lastControls["debug"]) {
 			Debug.Log("Velocity: " + rb.velocity);
@@ -90,18 +110,7 @@ public class PlayerManager : MonoBehaviour {
 			updateHealth(-10);
 			updateEnergy(-15);
 		}
-		//Turn on the shield
-		if((bool)controls["shield"] && !(bool)lastControls["shield"]) {
-			shieldManager.toggleShield();
-			Debug.Log("toggle shield");
-		}
-		//Show scoreboard while key is pressed
-		ui.setScoreboardVisible((bool)controls["scoreboard"]);
-		//Pause Menu (Doesn't actually pause the game)
-		if((bool)controls["menu"] && !(bool)lastControls["menu"]) {
-			ui.togglePauseMenuVisible();
-			localPause = !localPause;
-		}
+		//Update lastControls
 		lastControls["x"] = controls["x"];
 		lastControls["y"] = controls["y"];
 		lastControls["shoot"] = controls["shoot"];
@@ -112,7 +121,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void onTriggerEnter(Collider target){
-		target.GetComponent<ObjectManager>().performObjectTask(this.gameObject);
+		target.GetComponent<ObjectManager>().performObjectTaskEnter(this.gameObject);
 	}
 
 	/*
@@ -122,6 +131,10 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void onEnergyChange(){
+
+	}
+	
+	void onScoreChange(){
 
 	}*/
 
@@ -151,6 +164,20 @@ public class PlayerManager : MonoBehaviour {
 		energy = Mathf.Min(energy, maxEnergy);
 		ui.updateImage("EnergyBarPositive", new Vector2(energy, 10.0f));
 		ui.updateText("EnergyText", "Energy: " + energy + "/" + maxEnergy);	
+	}
+
+	public void updateScore(int magnitude){
+		score += magnitude;
+		ui.updateScoreboardEntry(this.playerName, score);
+	}
+
+	//Used for shield to queue up energy loss
+	public void queueEnergy(float magnitude){
+		queuedEnergy += magnitude;
+		if(queuedEnergy > 1.0f) {
+			updateEnergy(-Mathf.FloorToInt(queuedEnergy));
+			queuedEnergy -= Mathf.Floor(queuedEnergy);
+		}
 	}
 
 	public void asteroidCollision(int magnitude){

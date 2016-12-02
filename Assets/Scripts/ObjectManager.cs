@@ -42,7 +42,11 @@ public class ObjectManager : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		performObjectTask(other.gameObject);
+		performObjectTaskEnter(other.gameObject);
+	}
+
+	void OnTriggerExit(Collider other){
+		performObjectTaskExit(other.gameObject);
 	}
 
 	//Set the magnitude of what the object attached is supposed to do
@@ -60,7 +64,7 @@ public class ObjectManager : MonoBehaviour {
 	}
 
 	//Do what the object attached is supposed to do
-	public void performObjectTask(GameObject target){
+	public void performObjectTaskEnter(GameObject target){
 		if(target.tag.Equals("Player")){
 			PlayerManager pm = target.GetComponent<PlayerManager>();
 			switch(objectType) {
@@ -92,6 +96,7 @@ public class ObjectManager : MonoBehaviour {
 					collectableManager.spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
 					asteroidManager.AddAsteroid();
 					Destroy(this.gameObject);
+
 					break;
 				case "Bullet":
 					//TODO: Make an explosion and destroy target and self
@@ -104,9 +109,12 @@ public class ObjectManager : MonoBehaviour {
 			ShieldManager shield = target.gameObject.GetComponent<ShieldManager>();
 			switch(objectType) {
 				case "Asteroid":
-					shield.asteroidCollision(this.gameObject);
+					shield.asteroidCollision(this.gameObject, this.magnitudeOfActionF);
 					break;
 			}
 		}
+	}
+	public void performObjectTaskExit(GameObject target){
+		
 	}
 }
