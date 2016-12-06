@@ -10,24 +10,23 @@ public class AsteroidManager : MonoBehaviour {
 	public GameObject[] asteroidPrefabs;
 	public float asteroidLaunchForce; 	//Magnitude of the launch velocity (will be vectorized in code)
 
+	private GamefieldConstants gamefieldConstants;
 	private Vector3 fieldRadius; 				//Used to define where the asteroids will spawn from
 	private Vector3 fieldOffset;
 	private Vector3 fieldMargins;
 
 	//Initialization
 	void Start () {
-		fieldRadius = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldRadius();
-		fieldOffset = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldOffset();
-		fieldMargins = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldMargins();
+		gamefieldConstants = GameObject.Find("GameField").GetComponent<GamefieldConstants>();
+		fieldRadius = gamefieldConstants.getGameFieldRadius();
+		fieldOffset = gamefieldConstants.getGameFieldOffset();
+		fieldMargins = gamefieldConstants.getGameFieldMargins();
 		for(int i = 0; i < asteroidsOnField; i++) {
 			AddAsteroid();
 		}
 	}
 
-	//Loop to check where the asteroids are and destroy them if they are out of the field.
-	void Update(){
-		
-	}
+	//Defined Methods
 
 	//[Command]
 	//void CmdAddAsteroid(){
@@ -46,7 +45,7 @@ public class AsteroidManager : MonoBehaviour {
 		genAsteroid.GetComponent<ObjectManager>().setMagnitudeOfActionF(asteroidSize);
 		genAsteroid.transform.localScale *= asteroidSize / 4.0f;
 		//Add a force to the asteroid to make it go through the field
-		genAsteroid.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * asteroidLaunchForce);
+		genAsteroid.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * this.asteroidLaunchForce);
 		return genAsteroid;
 	}
 	bool RandBool(){ 	//Returns true or false

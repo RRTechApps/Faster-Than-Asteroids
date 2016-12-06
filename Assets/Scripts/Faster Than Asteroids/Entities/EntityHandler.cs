@@ -8,79 +8,80 @@ public class ObjectManager : MonoBehaviour {
 	private int magnitudeOfAction;
 	private float magnitudeOfActionF;
 	private bool destroyOnExit;
-	private Vector3 gameFieldRadius;
+	private Vector3 gamefieldRadius;
 	private AsteroidManager asteroidManager;
 	private CollectableManager collectableManager;
 
 	//Initialization
 	void Start(){
-		objectType = this.tag;
-		destroyOnExit = true;
-		if(objectType.Equals("Asteroid")) {
+		this.objectType = this.tag;
+		this.destroyOnExit = true;
+		if(this.objectType.Equals("Asteroid")) {
 			Vector3 scaleBy = Vector3.one * (this.magnitudeOfActionF / 5.0f);
 			this.transform.localScale.Scale(scaleBy);
 		}
-		gameFieldRadius = GameObject.Find("GameField").GetComponent<GameFieldHelper>().getGameFieldRadius();
-		asteroidManager = GameObject.Find("Asteroids").GetComponent<AsteroidManager>();
-		collectableManager = GameObject.Find("Collectables").GetComponent<CollectableManager>();
+		this.gamefieldRadius = GameObject.Find("GameField").GetComponent<GamefieldConstants>().getGameFieldRadius();
+		this.asteroidManager = GameObject.Find("Asteroids").GetComponent<AsteroidManager>();
+		this.collectableManager = GameObject.Find("Collectables").GetComponent<CollectableManager>();
 	}
 
 	//For the destroyOnExit flag
 	void Update(){
-		if(destroyOnExit) {
-			float x, z;
-			x = this.transform.position.x;
-			z = this.transform.position.z;
+		if(this.destroyOnExit) {
+			float x = this.transform.position.x;
+			float z = this.transform.position.z;
 			//If the position of this object is outside the radius of the game field
-			if(gameFieldRadius.x - Mathf.Abs(x) < 0 || gameFieldRadius.z - Mathf.Abs(z) < 0) {
+			if(this.gamefieldRadius.x - Mathf.Abs(x) < 0 || this.gamefieldRadius.z - Mathf.Abs(z) < 0) {
 				Destroy(this.gameObject);
 				if(this.objectType.Equals("Asteroid")) {
-					asteroidManager.AddAsteroid();
+					this.asteroidManager.AddAsteroid();
 				}
 			}
 		}
 	}
 
+	//Defined Methods
+
 	void OnTriggerEnter(Collider other){
-		performObjectTaskEnter(other.gameObject);
+		this.performObjectTaskEnter(other.gameObject);
 	}
 
 	void OnTriggerExit(Collider other){
-		performObjectTaskExit(other.gameObject);
+		this.performObjectTaskExit(other.gameObject);
 	}
 
 	//Set the magnitude of what the object attached is supposed to do
 	public void setMagnitudeOfAction(int magnitude){
-		magnitudeOfAction = magnitude;
+		this.magnitudeOfAction = magnitude;
 	}
 
 	//Set the magnitude of what the object attached is supposed to do
 	public void setMagnitudeOfActionF(float magnitude){
-		magnitudeOfActionF = magnitude;
+		this.magnitudeOfActionF = magnitude;
 	}
 
 	public void setDestroyOnExit(bool destroy){
-		destroyOnExit = destroy;
+		this.destroyOnExit = destroy;
 	}
 
 	//Do what the object attached is supposed to do
 	public void performObjectTaskEnter(GameObject target){
 		if(target.tag.Equals("Player")){
-			PlayerManager pm = target.GetComponent<PlayerManager>();
+			Player player = target.GetComponent<Player>();
 			switch(objectType) {
 				case "HPCol":
-					pm.updateHealth(magnitudeOfAction);
+					player.updateHealth(this.magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "EnergyCol":
-					pm.updateEnergy(magnitudeOfAction);
+					player.updateEnergy(this.magnitudeOfAction);
 					Destroy(this.gameObject);
 					break;
 				case "Asteroid":
-					pm.asteroidCollision(magnitudeOfAction);
+					player.asteroidCollision(this.magnitudeOfAction);
 					break;
 				case "Bullet":
-					pm.bulletCollision(magnitudeOfAction);
+					player.bulletCollision(this.magnitudeOfAction);
 					break;
 			}
 		} else if(target.tag.Equals("Bullet")){
@@ -93,8 +94,8 @@ public class ObjectManager : MonoBehaviour {
 					break;
 				case "Asteroid":
 					//TODO: Make an explosion and spawn a few boxes depending on size of asteroid
-					collectableManager.spawnBoxes((int)magnitudeOfActionF / 4, transform.position);
-					asteroidManager.AddAsteroid();
+					this.collectableManager.spawnBoxes((int)this.magnitudeOfActionF / 4, this.transform.position);
+					this.asteroidManager.AddAsteroid();
 					Destroy(this.gameObject);
 
 					break;
@@ -106,7 +107,7 @@ public class ObjectManager : MonoBehaviour {
 			}
 		} else if(target.tag.Equals("Shield")) {
 			Debug.Log("Shield Collide");
-			ShieldManager shield = target.gameObject.GetComponent<ShieldManager>();
+			ShieldController shield = target.gameObject.GetComponent<ShieldController>();
 			switch(objectType) {
 				case "Asteroid":
 					shield.asteroidCollision(this.gameObject, this.magnitudeOfActionF);
