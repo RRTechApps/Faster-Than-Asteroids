@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
 		//Instance Variables
 
 		//Original offset of the light
-		playerLight = transform.Find("Spotlight");
+		playerLight = transform.parent.Find("Spotlight");
 		lightOffset = playerLight.transform.position;
 		//Player's rigidbody
 		rb = GetComponent<Rigidbody>();
@@ -37,7 +37,6 @@ public class PlayerMovement : MonoBehaviour {
 		rotation = this.transform.eulerAngles.y * Mathf.Deg2Rad;
 		float horizontalControl = (float)controls.getInput("roll");
 		float verticalControl = (float)controls.getInput("pitch");
-		Debug.Log("pitch : " + verticalControl);
 
 		if(verticalControl != 0.0f) {
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)), ForceMode.Force);

@@ -71,12 +71,16 @@ public class PlayerControls: MonoBehaviour {
 
 	//Returns the current state of the control input
 	public object getInput(string input){
+		if(lastControls[input] is float)
+			return false;
 		return controls[input];
 	}
 
 	//Returns the last state of the control input
-	public object getLastInput(string input){
-		return lastControls[input];
+	public bool getLastInput(string input){
+		if(lastControls[input] is float)
+			return false;
+		return (bool)lastControls[input];
 	}
 
 	private bool getInputDown(string input){
@@ -92,10 +96,8 @@ public class PlayerControls: MonoBehaviour {
 	private void updateControls(){
 		controls["roll"] = Input.GetAxis("Horizontal");
 		controls["pitch"] = Input.GetAxis("Vertical");
-		controls["yawleft"] = Input.GetKey(KeyCode.Q);
-		controls["yawright"] = Input.GetKey(KeyCode.E);
-		controls["incthrust"] = Input.GetKey(KeyCode.C);
-		controls["decthrust"] = Input.GetKey(KeyCode.V);
+		controls["yaw"] = fakeAxisControl(Input.GetKey(KeyCode.Q), Input.GetKey(KeyCode.E));
+		controls["thrust"] = fakeAxisControl(Input.GetKey(KeyCode.C), Input.GetKey(KeyCode.V));
 		controls["shoot"] = Input.GetMouseButton(0);
 		controls["debug"] = Input.GetKey(KeyCode.O);
 		controls["shield"] = Input.GetKey(KeyCode.Space);
@@ -109,4 +111,9 @@ public class PlayerControls: MonoBehaviour {
 			lastControls[key] = controls[key];
 		}
 	}
+
+	private float fakeAxisControl(bool positive, bool negative){
+		return positive ? 1 : negative ? 1 : 0;
+	}
+
 }

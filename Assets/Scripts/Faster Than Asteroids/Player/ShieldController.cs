@@ -11,7 +11,7 @@ public class ShieldController : MonoBehaviour {
 	{
 		//Scripts
 
-		this.player = GetComponent<Player>();
+		this.player = this.transform.parent.GetComponent<Player>();
 
 		//Instance Variables
 
@@ -24,7 +24,6 @@ public class ShieldController : MonoBehaviour {
 
 	void Update(){
 		if(active) {
-			//Debug.Log("lost energy amt: " + Time.deltaTime);
 			this.player.queueEnergy(Time.deltaTime);
 		}
 	}
