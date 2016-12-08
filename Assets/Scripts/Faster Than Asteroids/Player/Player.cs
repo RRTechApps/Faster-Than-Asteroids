@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
 
 		controls = GetComponent<PlayerControls>();
 		playerMovement = GetComponent<PlayerMovement>();
-		ui = transform.parent.Find("UIObjects").GetComponent<UIManager>();
+		ui = transform.Find("UIObjects").GetComponent<UIManager>();
 
 		//Instance Variables
 

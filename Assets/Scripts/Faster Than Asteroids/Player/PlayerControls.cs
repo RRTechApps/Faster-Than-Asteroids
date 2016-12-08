@@ -40,7 +40,7 @@ public class PlayerControls: MonoBehaviour {
 		//Get control keys
 		updateControls();
 		//Turn on the shield
-		if((bool)getInput("shield") && !(bool)getLastInput("shield")) {
+		if(getInputDown("shield")) {
 			shieldManager.toggleShield();
 		}
 			
@@ -48,13 +48,13 @@ public class PlayerControls: MonoBehaviour {
 		ui.setScoreboardVisible((bool)getInput("scoreboard"));
 
 		//Pause Menu (Doesn't actually pause the game)
-		if((bool)getInput("menu") && !(bool)getLastInput("menu")) {
+		if(getInputDown("menu")) {
 			ui.togglePauseMenuVisible();
 			localPause = !localPause;
 		}
 
 		//Debug key
-		if ((bool)getInput("debug") && !(bool)getLastInput("debug")) {
+		if (getInputDown("debug")) {
 			playerMovement.debug();
 			player.updateHealth(-10);
 			player.updateEnergy(-15);
@@ -69,23 +69,33 @@ public class PlayerControls: MonoBehaviour {
 
 	//Defined Methods
 
+	//Returns the current state of the control input
 	public object getInput(string input){
 		return controls[input];
 	}
 
+	//Returns the last state of the control input
 	public object getLastInput(string input){
 		return lastControls[input];
 	}
 
-	private bool getToggledInput(string input){
+	private bool getInputDown(string input){
 		return (bool)getInput(input) && !(bool)getLastInput(input);
+	}
+
+	private bool getInputUp(string input){
+		return !(bool)getInput(input) && (bool)getLastInput(input);
 	}
 
 	//TODO: allow different keys to be set
 	//Updates controls to the current input
 	private void updateControls(){
-		controls["x"] = Input.GetAxis("Horizontal");
-		controls["y"] = Input.GetAxis("Vertical");
+		controls["roll"] = Input.GetAxis("Horizontal");
+		controls["pitch"] = Input.GetAxis("Vertical");
+		controls["yawleft"] = Input.GetKey(KeyCode.Q);
+		controls["yawright"] = Input.GetKey(KeyCode.E);
+		controls["incthrust"] = Input.GetKey(KeyCode.C);
+		controls["decthrust"] = Input.GetKey(KeyCode.V);
 		controls["shoot"] = Input.GetMouseButton(0);
 		controls["debug"] = Input.GetKey(KeyCode.O);
 		controls["shield"] = Input.GetKey(KeyCode.Space);
