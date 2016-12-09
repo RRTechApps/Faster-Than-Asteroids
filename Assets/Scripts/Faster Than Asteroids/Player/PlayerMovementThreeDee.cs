@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovementThreeDee : MonoBehaviour {
 	//This script belongs on the PlayerModel gameobject and controls player movement
 
 
@@ -35,19 +35,30 @@ public class PlayerMovement : MonoBehaviour {
 	//Movement is done here
 	void FixedUpdate () {
 		rotation = this.transform.eulerAngles.y * Mathf.Deg2Rad;
-		float roll = (float)controls.getInput("roll");
-		float pitch = (float)controls.getInput("pitch");
-		float yaw = (float)controls.getInput("yaw");
+		float roll = -controls.getAxis("roll");
+		float pitch = controls.getAxis("pitch");
+		float yaw = -controls.getAxis("yaw");
+		float thrust = controls.getAxis("thrust");
 
-		if(verticalControl != 0.0f) {
-			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)), ForceMode.Force);
+		if(thrust != 0.0f) {
+//			rb.AddForce(new Vector3(thrust * speed * Mathf.Sin(rotation), 0.0f, thrust * speed * Mathf.Cos(rotation)), ForceMode.Force);
+			rb.AddRelativeForce(new Vector3(thrust * speed, 0.0f, thrust * speed), ForceMode.Force);
 		}
-		if(horizontalControl != 0.0f) {
-			this.transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
-			rb.maxAngularVelocity = angSpeed / 20.0f;
-			rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
-			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
-			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
+		if(pitch != 0.0f) {
+			this.transform.Rotate(pitch * Time.deltaTime * angSpeed, 0.0f, 0.0f, Space.Self);
+			//rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
+		}
+		if(roll != 0.0f) {
+			this.transform.Rotate(0.0f, 0.0f, roll * Time.deltaTime * angSpeed, Space.Self);
+			//rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
+			//Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
+			//rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
+		}
+		if(yaw != 0.0f) {
+			this.transform.Rotate(0.0f, yaw * Time.deltaTime * angSpeed, 0.0f, Space.Self);
+			//rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
+			//Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
+			//rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
 		}
 	}
 

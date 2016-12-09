@@ -93,4 +93,8 @@ public class Player : MonoBehaviour {
 	public void bulletCollision(int magnitude){
 		//Make the player lose energy and health and/or degrade ship quality?
 	}
+
+	public Space getSpace(){
+		return Space.Self;
+	}
 }

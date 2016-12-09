@@ -13,6 +13,7 @@ public class PlayerControls: MonoBehaviour {
 	private ShieldController shieldManager;
 	private PlayerMovement playerMovement;
 	private Player player;
+	private CameraController cameraController;
 
 	void Start () {
 		//Script definitions
@@ -21,6 +22,7 @@ public class PlayerControls: MonoBehaviour {
 		shieldManager = transform.Find("Shield").gameObject.GetComponent<ShieldController>();
 		playerMovement = GetComponent<PlayerMovement>();
 		player = GetComponent<Player>();
+		cameraController = transform.parent.Find("PlayerCamera").GetComponent<CameraController>();
 
 		//Instance Variables
 
@@ -60,8 +62,8 @@ public class PlayerControls: MonoBehaviour {
 			player.updateEnergy(-15);
 		}
 
-		if((bool)getInput("changeview")) {
-
+		if(getInputDown("changeview")) {
+			cameraController.toggleView();
 		}
 		updateLastControls();
 	}
@@ -71,7 +73,7 @@ public class PlayerControls: MonoBehaviour {
 
 	//Returns the current state of the control input
 	public object getInput(string input){
-		if(lastControls[input] is float)
+		if(controls[input] is float)
 			return false;
 		return controls[input];
 	}
@@ -81,6 +83,18 @@ public class PlayerControls: MonoBehaviour {
 		if(lastControls[input] is float)
 			return false;
 		return (bool)lastControls[input];
+	}
+
+	public float getAxis(string input){
+		if(controls[input] is bool)
+			return 0.0f;
+		return (float)controls[input];
+	}
+
+	public float getLastAxis(string input){
+		if(lastControls[input] is bool)
+			return 0.0f;
+		return (float)lastControls[input];
 	}
 
 	private bool getInputDown(string input){
@@ -113,7 +127,7 @@ public class PlayerControls: MonoBehaviour {
 	}
 
 	private float fakeAxisControl(bool positive, bool negative){
-		return positive ? 1 : negative ? 1 : 0;
+		return positive ? 1.0f : negative ? -1.0f : 0.0f;
 	}
 
 }

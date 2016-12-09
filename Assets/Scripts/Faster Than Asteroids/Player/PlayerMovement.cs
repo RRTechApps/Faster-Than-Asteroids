@@ -35,15 +35,13 @@ public class PlayerMovement : MonoBehaviour {
 	//Movement is done here
 	void FixedUpdate () {
 		rotation = this.transform.eulerAngles.y * Mathf.Deg2Rad;
-		float horizontalControl = (float)controls.getInput("roll");
-		float verticalControl = (float)controls.getInput("pitch");
-
+		float horizontalControl = controls.getAxis("roll");
+		float verticalControl = controls.getAxis("pitch");
 		if(verticalControl != 0.0f) {
 			rb.AddForce(new Vector3(verticalControl * speed * Mathf.Sin(rotation), 0.0f, verticalControl * speed * Mathf.Cos(rotation)), ForceMode.Force);
 		}
 		if(horizontalControl != 0.0f) {
-			this.transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f);
-			rb.maxAngularVelocity = angSpeed / 20.0f;
+			this.transform.Rotate(0.0f, horizontalControl * Time.deltaTime * angSpeed, 0.0f, Space.Self);
 			rotation = this.transform.eulerAngles.y * (Mathf.PI / 180.0f);
 			Vector3 newVelocity = new Vector3(rb.velocity.magnitude * Mathf.Sin(rotation), 0.0f, rb.velocity.magnitude * Mathf.Cos(rotation));
 			rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, Time.deltaTime);
