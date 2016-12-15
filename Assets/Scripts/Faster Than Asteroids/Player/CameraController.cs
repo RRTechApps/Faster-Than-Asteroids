@@ -26,14 +26,17 @@ public class CameraController : MonoBehaviour {
 			case CurrentViews.TOPDOWN:
 				this.transform.position = player.position + new Vector3(0.0f, 10.0f, 0.0f);
 				this.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
+				this.transform.RotateAround(player.position, Vector3.up, player.eulerAngles.y);
 				break;
 			case CurrentViews.FIRSTPERSON:
 				this.transform.position = player.position + new Vector3(0.0f, 0.0f, 1.0f);
-				this.transform.eulerAngles = Vector3.zero;
+				this.transform.RotateAround(player.position, Vector3.up, player.eulerAngles.y);
+				this.transform.LookAt(player.Find("Shield"));
 				break;
 			case CurrentViews.THIRDPERSON:
 				this.transform.position = player.position + new Vector3(0.0f, 2.0f, -5.0f);
-				this.transform.eulerAngles = Vector3.zero;
+				this.transform.RotateAround(player.position, Vector3.up, player.eulerAngles.y);
+				this.transform.LookAt(player);
 				break;
 		}
 	}

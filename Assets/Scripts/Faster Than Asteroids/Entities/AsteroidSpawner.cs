@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class AsteroidManager : MonoBehaviour {
+public class AsteroidSpawner : MonoBehaviour {
 	//This script should go on an empty gameObject located at the middle of the game field, and is used to manage asteroids (spawning them)
 	//There should only be one instance of this script per client/server
 
@@ -22,7 +22,7 @@ public class AsteroidManager : MonoBehaviour {
 		fieldOffset = gamefieldConstants.getGameFieldOffset();
 		fieldMargins = gamefieldConstants.getGameFieldMargins();
 		for(int i = 0; i < asteroidsOnField; i++) {
-			AddAsteroid();
+			this.AddAsteroid();
 		}
 	}
 
@@ -42,7 +42,7 @@ public class AsteroidManager : MonoBehaviour {
 		GameObject genAsteroid = (GameObject)Instantiate(asteroidPrefabs[Random.Range(0,3)], asteroidPosition, Quaternion.FromToRotation(Vector3.forward, direction), this.transform);
 		//Set the size of the asteroid
 		float asteroidSize = Random.Range(1.0f, 20.0f);
-		genAsteroid.GetComponent<ObjectManager>().setMagnitudeOfActionF(asteroidSize);
+		genAsteroid.GetComponent<EntityHandler>().setMagnitudeOfActionF(asteroidSize);
 		genAsteroid.transform.localScale *= asteroidSize / 4.0f;
 		//Add a force to the asteroid to make it go through the field
 		genAsteroid.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * this.asteroidLaunchForce);

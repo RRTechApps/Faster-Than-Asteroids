@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ObjectManager : MonoBehaviour {
+public class EntityHandler : MonoBehaviour {
 	//This script belongs on every spawned prefab and controls its collider
 	
 	private string objectType;
@@ -9,7 +9,7 @@ public class ObjectManager : MonoBehaviour {
 	private float magnitudeOfActionF;
 	private bool destroyOnExit;
 	private Vector3 gamefieldRadius;
-	private AsteroidManager asteroidManager;
+	private AsteroidSpawner asteroidSpawner;
 	private CollectableManager collectableManager;
 
 	//Initialization
@@ -21,7 +21,7 @@ public class ObjectManager : MonoBehaviour {
 			this.transform.localScale.Scale(scaleBy);
 		}
 		this.gamefieldRadius = GameObject.Find("GameField").GetComponent<GamefieldConstants>().getGameFieldRadius();
-		this.asteroidManager = GameObject.Find("Asteroids").GetComponent<AsteroidManager>();
+		this.asteroidSpawner = GameObject.Find("Asteroids").GetComponent<AsteroidSpawner>();
 		this.collectableManager = GameObject.Find("Collectables").GetComponent<CollectableManager>();
 	}
 
@@ -34,7 +34,7 @@ public class ObjectManager : MonoBehaviour {
 			if(this.gamefieldRadius.x - Mathf.Abs(x) < 0 || this.gamefieldRadius.z - Mathf.Abs(z) < 0) {
 				Destroy(this.gameObject);
 				if(this.objectType.Equals("Asteroid")) {
-					this.asteroidManager.AddAsteroid();
+					this.asteroidSpawner.AddAsteroid();
 				}
 			}
 		}
@@ -95,7 +95,7 @@ public class ObjectManager : MonoBehaviour {
 				case "Asteroid":
 					//TODO: Make an explosion and spawn a few boxes depending on size of asteroid
 					this.collectableManager.spawnBoxes((int)this.magnitudeOfActionF / 4, this.transform.position);
-					this.asteroidManager.AddAsteroid();
+					this.asteroidSpawner.AddAsteroid();
 					Destroy(this.gameObject);
 
 					break;

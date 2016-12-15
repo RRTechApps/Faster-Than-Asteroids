@@ -39,10 +39,15 @@ public class Player : MonoBehaviour {
 
 		//Initialization
 
-		ui.addScoreboardEntry(playerName, Color.red);
+		ui.addScoreboardEntry(playerName, new Color(200.0f, 40.0f, 40.0f, 100.0f));
 	}
 
 	//Defined Methods
+
+	public void updateName(string playerName){
+		this.playerName = playerName;
+		ui.updateScoreboardEntry(this.playerName, this.score);
+	}
 
 	public void updateHealth(int magnitude){
 		health += magnitude;

@@ -39,9 +39,9 @@ public class CollectableManager : MonoBehaviour {
 			//Where the box will be located
 			Vector3 boxPos = new Vector3(around.x + Random.Range(-this.boxSpawnRadius, this.boxSpawnRadius), 0, around.z + Random.Range(-this.boxSpawnRadius, this.boxSpawnRadius)); //around.y + Random.Range(-boxSpawnRadius, boxSpawnRadius)
 			//Spawns either a random hp or energy box with a random amount using the chance
-			GameObject boxGen = (GameObject)Instantiate(Random.Range(0, 2) == 0 ? hpBoxPrefab : energyBoxPrefab, boxPos, Quaternion.Euler(0.0f, Random.Range(-180.0f, 180.0f), 0.0f));
+			GameObject boxGen = (GameObject)Instantiate(Random.Range(0, 2) == 0 ? hpBoxPrefab : energyBoxPrefab, boxPos, Quaternion.Euler(0.0f, Random.Range(-180.0f, 180.0f), 0.0f), this.transform);
 			//Set the amount of the generated box
-			boxGen.GetComponent<ObjectManager>().setMagnitudeOfAction(boxAmount);
+			boxGen.GetComponent<EntityHandler>().setMagnitudeOfAction(boxAmount);
 		}
 	}
 }
